@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Http\Requests\StorePostRequest;
-use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -14,14 +13,23 @@ class PostController extends Controller
     public function index()
     {
         //
+        $posts = Post::all();
+        return ['message' => 'get all ok','datas' => $posts];
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePostRequest $request)
+    public function store(Request $request)
     {
         //
+        $fields = $request->validate([
+            'title' => 'required|max:200',
+            'body' => 'required',
+        ]);
+
+        $post = Post::create($fields);
+        return ['message' => 'store ok','datas' => $post];
     }
 
     /**
@@ -30,14 +38,22 @@ class PostController extends Controller
     public function show(Post $post)
     {
         //
+        return ['message' => 'show ok','datas' => $post];
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostRequest $request, Post $post)
+    public function update(Request $request, Post $post)
     {
         //
+        $fields = $request->validate([
+            'title' => 'required|max:200',
+            'body' => 'required',
+        ]);
+
+        $post->update($fields);
+        return ['message' => 'update ok','datas' => $post];
     }
 
     /**
@@ -46,5 +62,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+        $post->delete();
+        return ['message' => 'delete ok','datas' => []];
     }
 }
