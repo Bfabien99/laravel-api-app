@@ -23,7 +23,7 @@ class PostController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        //
+        # retourner tous les posts
         $posts = Post::all();
         return ['message' => 'get all ok','datas' => $posts];
     }
@@ -33,7 +33,7 @@ class PostController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
-        //
+        # validation des entrées
         $fields = $request->validate([
             'title' => 'required|max:200',
             'body' => 'required',
@@ -49,7 +49,7 @@ class PostController extends Controller implements HasMiddleware
      */
     public function show(Post $post)
     {
-        //
+        # retourner le post
         return ['message' => 'show ok','datas' => $post];
     }
 
@@ -58,13 +58,14 @@ class PostController extends Controller implements HasMiddleware
      */
     public function update(Request $request, Post $post)
     {
-        //utilisation de Policy pour la permission
+        # utilisation de Policy pour la permission
         Gate::authorize('modify', $post);
         $fields = $request->validate([
             'title' => 'required|max:200',
             'body' => 'required',
         ]);
 
+        # mise à jour du post
         $post->update($fields);
         return ['message' => 'update ok','datas' => $post];
     }
@@ -74,8 +75,10 @@ class PostController extends Controller implements HasMiddleware
      */
     public function destroy(Post $post)
     {
-        //utilisation de Policy pour la permission
+        # utilisation de Policy pour la permission
         Gate::authorize('modify', $post);
+
+        # suppression du post
         $post->delete();
         return ['message' => 'delete ok','datas' => []];
     }
