@@ -28,7 +28,8 @@ class PostController extends Controller
             'body' => 'required',
         ]);
 
-        $post = Post::create($fields);
+        # crée le post directement à partir de l'utilisateur connecté
+        $post = $request->user()->posts()->create($fields);
         return ['message' => 'store ok','datas' => $post];
     }
 
