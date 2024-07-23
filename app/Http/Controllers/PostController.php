@@ -6,6 +6,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller implements HasMiddleware
 {
@@ -57,7 +58,8 @@ class PostController extends Controller implements HasMiddleware
      */
     public function update(Request $request, Post $post)
     {
-        //
+        //utilisation de Policy pour la permission
+        Gate::authorize('modify', $post);
         $fields = $request->validate([
             'title' => 'required|max:200',
             'body' => 'required',
@@ -72,7 +74,8 @@ class PostController extends Controller implements HasMiddleware
      */
     public function destroy(Post $post)
     {
-        //
+        //utilisation de Policy pour la permission
+        Gate::authorize('modify', $post);
         $post->delete();
         return ['message' => 'delete ok','datas' => []];
     }
